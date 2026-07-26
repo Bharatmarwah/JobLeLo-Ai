@@ -1,0 +1,55 @@
+# ── Java / Maven ──────────────────────────────────────────
+backend/target/
+backend/*.class
+backend/*.jar
+backend/*.war
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/!.mvn/wrapper/maven-wrapper.jar
+
+# ── Node / Frontend ───────────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.cache/
+frontend/*.tsbuildinfo
+
+# ── Environment & Secrets ────────────────────────────────
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+
+# ── IDE & Editor ─────────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+*.sublime-*
+.project
+.classpath
+.settings/
+
+# ── OS Artifacts ─────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# ── Logs & Temp ──────────────────────────────────────────
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+
+# ── Docker ───────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── Misc ─────────────────────────────────────────────────
+*.pid
+*.seed
+*.pid.lock

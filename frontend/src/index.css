@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --page: #FBF7EF;
+  --card: #FFFFFF;
+  --card-hover: #F5F0E6;
+  --line: rgba(20,33,61,0.12);
+  --line-strong: rgba(20,33,61,0.28);
+  --ink: #14213D;
+  --ink-soft: #2A3557;
+  --marigold: #F4A623;
+  --vermillion: #E14F3D;
+  --emerald: #1F6F5C;
+  --charcoal: #24211D;
+  --muted: #F1ECDF;
+  --text-primary: #14213D;
+  --text-secondary: #2A3557;
+  --accent: #F4A623;
+  --accent-soft: #FEF7E8;
+  --success: #1F6F5C;
+  --warning: #E14F3D;
+}
+
+.dark {
+  --page: #0E0E17;
+  --card: #181826;
+  --card-hover: #1E1E30;
+  --line: rgba(251,247,239,0.1);
+  --line-strong: rgba(251,247,239,0.2);
+  --ink: #F1F1F7;
+  --ink-soft: #A0A0B0;
+  --marigold: #9C96F5;
+  --vermillion: #F87171;
+  --emerald: #4ADE80;
+  --charcoal: #F1F1F7;
+  --muted: #24243A;
+  --text-primary: #F1F1F7;
+  --text-secondary: #A0A0B0;
+  --accent: #9C96F5;
+  --accent-soft: #25204E;
+  --success: #4ADE80;
+  --warning: #F59E0B;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-marigold: var(--marigold);
+  --color-vermillion: var(--vermillion);
+  --color-emerald: var(--emerald);
+  --color-charcoal: var(--charcoal);
+  --color-muted: var(--muted);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-background: var(--page);
+  --color-foreground: var(--text-primary);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-soft); }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
