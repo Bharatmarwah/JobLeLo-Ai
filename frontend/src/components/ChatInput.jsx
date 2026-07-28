@@ -175,6 +175,7 @@ export default function ChatInput({ onSend, disabled }) {
           <div className="flex-1 relative">
             <textarea
               ref={textareaRef}
+              name="chat-input"
               value={input}
               onChange={(e) => {
                 setInput(e.target.value);

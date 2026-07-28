@@ -3,6 +3,7 @@ package in.joblelo.JobAgentBackend.controller;
 import in.joblelo.JobAgentBackend.responsedto.UserInfoResponse;
 import in.joblelo.JobAgentBackend.responsedto.UserJobResponse;
 import in.joblelo.JobAgentBackend.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,11 @@ public class UserController{
     @GetMapping("/user")
     public UserInfoResponse userInfo(){
         return userService.getUserInfo();
+    }
+
+    @GetMapping("/user/avatar")
+    public void userAvatar(HttpServletResponse response) {
+        userService.serveAvatar(response);
     }
 
     @GetMapping("/user/job")

@@ -33,8 +33,67 @@ Job hunting today means keeping a dozen tabs open — Naukri, LinkedIn, Indeed, 
 
 ---
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/1.png" width="800" alt="Landing page"/>
+</p>
+<p align="center"><sub>Start here.</sub></p>
+
+<br>
+
+<p align="center">
+  <img src="docs/screenshots/2.png" width="800" alt="Login page"/>
+</p>
+<p align="center"><sub>Sign in with Google or GitHub.</sub></p>
+
+<br>
+
+<p align="center">
+  <img src="docs/screenshots/3.png" width="800" alt="Chat greeting"/>
+</p>
+<p align="center"><sub>The AI greets you and suggests where to begin.</sub></p>
+
+<br>
+
+<p align="center">
+  <img src="docs/screenshots/4.png" width="800" alt="Gmail connector tool"/>
+</p>
+<p align="center"><sub>Connect Gmail — the AI can then scan your inbox alongside job boards.</sub></p>
+
+<br>
+
+<p align="center">
+  <img src="docs/screenshots/5.png" width="800" alt="Asking for jobs"/>
+</p>
+<p align="center"><sub>Describe your ideal role in plain English.</sub></p>
+
+<br>
+
+<p align="center">
+  <img src="docs/screenshots/8.png" width="800" alt="AI response with ranked jobs"/>
+</p>
+<p align="center"><sub>Ranked job cards with relevance scores, company details, and apply links.</sub></p>
+
+<br>
+
+<p align="center">
+  <img src="docs/screenshots/9.png" width="800" alt="Follow-up conversation"/>
+</p>
+<p align="center"><sub>Keep the conversation going — ask about specific applications or refine your search.</sub></p>
+
+<br>
+
+<p align="center">
+  <img src="docs/screenshots/10.png" width="800" alt="My Jobs dashboard"/>
+</p>
+<p align="center"><sub>All your saved jobs in one place, with scores and status.</sub></p>
+
+---
+
 ## Table of Contents
 
+- [Screenshots](#screenshots)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)

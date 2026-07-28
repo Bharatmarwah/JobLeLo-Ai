@@ -3,6 +3,8 @@ import { useAuth, useChat } from "../main";
 import JobList from "./JobList";
 import CareerEmailCard from "./CareerEmailCard";
 
+const AVATAR_URL = (import.meta.env.VITE_API_URL || "http://localhost:8080") + "/api/v1/user/avatar";
+
 function formatTime(ts) {
   const diff = Date.now() - ts.getTime();
   if (diff < 60000) return "just now";
@@ -56,7 +58,14 @@ export default function ChatMessageBubble({ message }) {
             <span className="text-[11px]" style={{ color: "var(--text-secondary)", opacity: 0.5 }}>{formatTime(message.timestamp)}</span>
             <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>You</span>
             {user?.profileUrl ? (
-              <img src={user.profileUrl} alt="" className="w-6 h-6 rounded-full shrink-0 object-cover" />
+              <img src={AVATAR_URL} alt="" referrerPolicy="no-referrer"
+                className="w-6 h-6 rounded-full shrink-0"
+                style={{ objectFit: "cover", display: "block" }}
+                onError={(e) => {
+                  e.target.style.display = "none";
+                  const parent = e.target.parentElement;
+                  if (parent) parent.textContent = (user?.username || user?.email || "U")[0].toUpperCase();
+                }} />
             ) : (
               <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0" style={{ background: "var(--marigold)", color: "var(--ink)" }}>
                 {(user?.username || user?.email || "U")[0].toUpperCase()}

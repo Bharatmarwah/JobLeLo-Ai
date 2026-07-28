@@ -21,14 +21,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.core.ParameterizedTypeReference;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import in.joblelo.JobAgentBackend.exceptionhandling.ApiException;
@@ -59,6 +57,14 @@ public class UserService {
     @Value("${google.client.id}")
     private String clientId;
     private final String TOKEN_TYPE = "Bearer";
+
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final Map<String, CacheEntry> avatarCache = new ConcurrentHashMap<>();
+    private static final long AVATAR_CACHE_TTL = 3600_000; // 1 hour
+
+    private record CacheEntry(byte[] data, String contentType, long expiry) {
+        boolean isValid() { return System.currentTimeMillis() < expiry; }
+    }
 
 
     public TokenResponse createGoogleUser(String idToken, HttpServletResponse httpServletResponse) {
@@ -91,7 +97,10 @@ public class UserService {
             AuthUser user;
             if (existingUser.isPresent()) {
                 user = existingUser.get();
-                log.info("User already exists with email: {}", email);
+                user.setUsername(jwt.getClaim("name"));
+                user.setProfileUrl(jwt.getClaim("picture"));
+                user = authUserRepo.save(user);
+                log.info("User already exists with email: {}, updated profile", email);
             } else {
                 String userId = UUID.randomUUID().toString();
                 String username = jwt.getClaim("name");
@@ -138,8 +147,6 @@ public class UserService {
     public TokenResponse createGithubUser(
             String githubAccessToken,
             HttpServletResponse response) {
-
-        System.out.println(githubAccessToken);
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -206,6 +213,11 @@ public class UserService {
         final String resolvedEmail = email;
 
         AuthUser user = authUserRepo.findByEmail(resolvedEmail)
+                .map(existing -> {
+                    existing.setUsername(githubUser.getName());
+                    existing.setProfileUrl(githubUser.getAvatar_url());
+                    return authUserRepo.save(existing);
+                })
                 .orElseGet(() -> {
                     AuthUser newUser = new AuthUser();
                     newUser.setUserId(UUID.randomUUID().toString());
@@ -416,6 +428,61 @@ public class UserService {
             log.info("Job {} deleted for user {}", id, userId);
         } else {
             log.warn("Job {} not found or not owned by user {}", id, userId);
+        }
+    }
+
+    public void serveAvatar(HttpServletResponse response) {
+        String userId = (String) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        AuthUser user = authUserRepo
+                .findById(userId)
+                .orElseThrow(() -> new ApiException("User not found", HttpStatus.NOT_FOUND));
+
+        String profileUrl = user.getProfileUrl();
+        if (profileUrl == null || profileUrl.isBlank()) {
+            response.setStatus(204);
+            return;
+        }
+
+        CacheEntry cached = avatarCache.get(profileUrl);
+        if (cached != null && cached.isValid()) {
+            response.setContentType(cached.contentType());
+            response.setHeader("Cache-Control", "public, max-age=3600");
+            try {
+                response.getOutputStream().write(cached.data());
+            } catch (Exception e) {
+                log.warn("Failed to write cached avatar", e);
+            }
+            return;
+        }
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("User-Agent", "JobLelo/1.0");
+            HttpEntity<Void> entity = new HttpEntity<>(headers);
+            ResponseEntity<byte[]> res = restTemplate.exchange(
+                    profileUrl, HttpMethod.GET, entity, byte[].class);
+
+            byte[] data = res.getBody();
+            String contentType = res.getHeaders().getContentType() != null
+                    ? res.getHeaders().getContentType().toString()
+                    : "image/jpeg";
+
+            if (data != null && data.length > 0) {
+                avatarCache.put(profileUrl, new CacheEntry(data, contentType,
+                        System.currentTimeMillis() + AVATAR_CACHE_TTL));
+                response.setContentType(contentType);
+                response.setHeader("Cache-Control", "public, max-age=3600");
+                response.getOutputStream().write(data);
+            } else {
+                response.setStatus(204);
+            }
+        } catch (Exception e) {
+            log.warn("Failed to fetch avatar from {}", profileUrl, e);
+            response.setStatus(204);
         }
     }
 }

@@ -43,7 +43,7 @@ function AuthProvider({ children }) {
         try {
           console.log("[Auth] Token found, fetching user info...");
           const info = await getUserInfo();
-          console.log("[Auth] User loaded:", info.username, info.email);
+          console.log("[Auth] User loaded:", info);
           setUser(info);
           setIsLoggedIn(true);
         } catch (err) {
