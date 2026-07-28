@@ -95,9 +95,6 @@ public class GoogleMailService {
         String refreshToken = response.getBody().getRefreshToken();
         Long expiresIn = response.getBody().getAccessTokenExpiry();
 
-        System.out.println(accessToken);
-        System.out.println(refreshToken);
-
         CreateUserGmailAccountRequest gmailAccountRequest =
                 new CreateUserGmailAccountRequest(
                         accessToken,

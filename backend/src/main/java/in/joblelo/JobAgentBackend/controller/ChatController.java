@@ -33,7 +33,6 @@ public class ChatController {
     @PostMapping("/create-session")
     public SessionResponse createSession(){
         String sessionId = UUID.randomUUID().toString();
-        System.out.println(sessionId);
         return new SessionResponse(sessionId);
     }
 

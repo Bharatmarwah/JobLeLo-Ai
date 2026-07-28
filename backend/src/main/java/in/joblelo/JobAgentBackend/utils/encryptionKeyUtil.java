@@ -17,7 +17,5 @@ public class encryptionKeyUtil {
 
             String key = Base64.getEncoder()
                     .encodeToString(secretKey.getEncoded());
-
-            System.out.println(key);
         }
     }
